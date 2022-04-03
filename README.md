@@ -2,6 +2,14 @@
 
 M5Atom Lite で BME280 から取得した気温,湿度,気圧を（雑な） Prometheus 形式で出力する。
 
+## 導入
+
+- ボードマネージャから *esp32* を追加
+  * `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json` を*追加のボードマネージャのURL*として設定しておく
+  * ボードは **M5Stack-ATOM** を選択
+- [finitespace/BME280](https://github.com/finitespace/BME280) を導入
+- `conf.hpp.sample` を `conf.hpp` にコピーして修正
+
 ## 出力例
 
 ```
@@ -18,10 +26,8 @@ pressure 1025.4035644531
 
 パスが `/metrics` であろうが、なかろうが同じ動作をする。メソッドに関しても同じ。
 
-## 導入
+### 接続例
 
-- ボードマネージャから *esp32* を追加
-  * `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json` を*追加のボードマネージャのURL*として設定しておく
-  * ボードは **M5Stack-ATOM** を選択
-- [finitespace/BME280](https://github.com/finitespace/BME280) を導入
-- `conf.hpp.sample` を `conf.hpp` にコピーして修正
+適当に繋いでいる。もしかしたら間違っているかも。
+
+![IMG_6889.jpg](./IMG_6889.jpg)
