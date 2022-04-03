@@ -2,21 +2,22 @@
 #include <M5Atom.h>
 #include "./conf.hpp"
 
+WiFiServer server(80);
+
 void print_mac_address(Stream & stream) {
   byte mac[6] {};
   WiFi.macAddress(mac);
-  stream.print("MAC: ");
-  stream.print(mac[5],HEX);
+  stream.print(mac[5], HEX);
   stream.print(":");
-  stream.print(mac[4],HEX);
+  stream.print(mac[4], HEX);
   stream.print(":");
-  stream.print(mac[3],HEX);
+  stream.print(mac[3], HEX);
   stream.print(":");
-  stream.print(mac[2],HEX);
+  stream.print(mac[2], HEX);
   stream.print(":");
-  stream.print(mac[1],HEX);
+  stream.print(mac[1], HEX);
   stream.print(":");
-  stream.println(mac[0],HEX);
+  stream.println(mac[0], HEX);
 }
 
 void print_ip_address(Stream & stream) {
@@ -38,7 +39,33 @@ void setup() {
   Serial.println("Connected WiFi");
   print_mac_address(Serial);
   print_ip_address(Serial);
+
+  server.begin();
 }
 
 void loop() {
+  auto client = server.available();
+  if (!client) {
+    return;
+  }
+  Serial.println("new client!");
+  while (client.connected()) {
+    if (!client.available()) {
+      continue;
+    }
+    const auto c = client.read();
+    if (c != '\n') {
+      continue;
+    }
+    client.println("HTTP/1.1 200 OK");
+    client.println("Content-Type: text/plain");
+    client.println();
+    print_mac_address(client);
+    print_ip_address(client);
+    break;
+  }
+  client.stop();
+  Serial.println("client closed");
+
+  M5.update();
 }
