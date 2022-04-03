@@ -1,6 +1,7 @@
 #include <WiFi.h>
 #include <M5Atom.h>
-#include "./conf.hpp"
+#include "conf.hpp"
+#include "metrics.hpp"
 
 /**
  * @brief 受け取った Stream に MAC アドレスを出力する
@@ -18,6 +19,8 @@ void print_ip_address(Stream & stream);
 void recv_client(WiFiClient & client);
 
 WiFiServer server(80);
+constexpr uint32_t metrics_count = 1;
+Metric* metrics[metrics_count] = { new IncrementalMetric() };
 
 void setup() {
   // Enable lcd and serial. Disable sdcard.
@@ -81,8 +84,10 @@ void recv_client(WiFiClient & client) {
     client.println("HTTP/1.1 200 OK");
     client.println("Content-Type: text/plain");
     client.println();
-    print_mac_address(client);
-    print_ip_address(client);
+    for (uint32_t i = 0; i < metrics_count; ++i) {
+      metrics[i]->update_metric();
+      metrics[i]->write_metric(client);
+    }
     break;
   }
   client.stop();
