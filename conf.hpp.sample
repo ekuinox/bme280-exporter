@@ -1,0 +1,2 @@
+constexpr const char * const WIFI_SSID = "";
+constexpr const char * const WIFI_PASSPHRASE = "";
