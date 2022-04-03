@@ -8,7 +8,7 @@ class BME280;
  * @brief 温度のメトリック
  */
 struct TemperatureMetric : Metric {
-  TemperatureMetric(BME280 & bme280);
+  TemperatureMetric(BME280 * bme280);
   virtual void update_metric() override;
   virtual void write_metric_name(Stream & stream) const override;
   virtual void write_help_message(Stream & stream) const override;
@@ -16,7 +16,7 @@ struct TemperatureMetric : Metric {
   virtual void write_metric_value(Stream & stream) const override;
 
 private:
-  BME280 & bme280;
+  BME280 * bme280;
   float value;
 };
 
@@ -24,7 +24,7 @@ private:
  * @brief 湿度のメトリック
  */
 struct HumidityMetric : Metric {
-  HumidityMetric(BME280 & bme280);
+  HumidityMetric(BME280 * bme280);
   virtual void update_metric() override;
   virtual void write_metric_name(Stream & stream) const override;
   virtual void write_help_message(Stream & stream) const override;
@@ -32,7 +32,7 @@ struct HumidityMetric : Metric {
   virtual void write_metric_value(Stream & stream) const override;
 
 private:
-  BME280 & bme280;
+  BME280 * bme280;
   float value;
 };
 
@@ -40,7 +40,7 @@ private:
  * @brief 温度のメトリック
  */
 struct PressureMetric : Metric {
-  PressureMetric(BME280 & bme280);
+  PressureMetric(BME280 * bme280);
   virtual void update_metric() override;
   virtual void write_metric_name(Stream & stream) const override;
   virtual void write_help_message(Stream & stream) const override;
@@ -48,6 +48,6 @@ struct PressureMetric : Metric {
   virtual void write_metric_value(Stream & stream) const override;
 
 private:
-  BME280 & bme280;
+  BME280 * bme280;
   float value;
 };

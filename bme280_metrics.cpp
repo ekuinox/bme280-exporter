@@ -2,14 +2,14 @@
 #include "bme280_metrics.hpp"
 
 constexpr auto TEMPERATURE_UNIT = BME280::TempUnit_Celsius;
-constexpr auto ATMOSPHERIC_PRESSURE_UNIT = BME280::PresUnit_hPa;
+constexpr auto PRESSURE_UNIT = BME280::PresUnit_hPa;
 
 /// START TemperatureMetric
-TemperatureMetric::TemperatureMetric(BME280 & bme280): bme280(bme280), value(NAN) {
+TemperatureMetric::TemperatureMetric(BME280 * bme280): bme280(bme280), value(NAN) {
 }
 
 void TemperatureMetric::update_metric() {
-  const auto value = this->bme280.temp(TEMPERATURE_UNIT);
+  const auto value = this->bme280->temp(TEMPERATURE_UNIT);
   this->value = value;
 }
 
@@ -30,11 +30,11 @@ void TemperatureMetric::write_metric_value(Stream & stream) const {
 }
 
 /// START HumidityMetric
-HumidityMetric::HumidityMetric(BME280 & bme280): bme280(bme280), value(NAN) {
+HumidityMetric::HumidityMetric(BME280 * bme280): bme280(bme280), value(NAN) {
 }
 
 void HumidityMetric::update_metric() {
-  const auto value = this->bme280.temp(TEMPERATURE_UNIT);
+  const auto value = this->bme280->hum();
   this->value = value;
 }
 
@@ -55,11 +55,11 @@ void HumidityMetric::write_metric_value(Stream & stream) const {
 }
 
 /// START PressureMetric
-PressureMetric::PressureMetric(BME280 & bme280): bme280(bme280), value(NAN) {
+PressureMetric::PressureMetric(BME280 * bme280): bme280(bme280), value(NAN) {
 }
 
 void PressureMetric::update_metric() {
-  const auto value = this->bme280.temp(TEMPERATURE_UNIT);
+  const auto value = this->bme280->pres(PRESSURE_UNIT);
   this->value = value;
 }
 

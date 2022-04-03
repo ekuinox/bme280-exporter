@@ -1,5 +1,7 @@
+#include <Wire.h>
 #include <WiFi.h>
 #include <M5Atom.h>
+#include <BME280I2C.h>
 #include "conf.hpp"
 #include "metrics.hpp"
 #include "bme280_metrics.hpp"
@@ -20,8 +22,13 @@ void print_ip_address(Stream & stream);
 void recv_client(WiFiClient & client);
 
 WiFiServer server(80);
-constexpr uint32_t metrics_count = 1;
-Metric* metrics[metrics_count] = { new IncrementalMetric() };
+BME280I2C bme280 {};
+constexpr uint32_t metrics_count = 3;
+Metric* metrics[metrics_count] = {
+  new TemperatureMetric(&bme280),
+  new HumidityMetric(&bme280),
+  new PressureMetric(&bme280),
+};
 
 void setup() {
   // Enable lcd and serial. Disable sdcard.
@@ -38,6 +45,24 @@ void setup() {
   print_mac_address(Serial);
   print_ip_address(Serial);
 
+  // Setup pins
+  pinMode(BME280_SCK_PIN, INPUT_PULLUP);
+  pinMode(BME280_SDI_PIN, INPUT_PULLUP);
+
+  // Start I2C
+  Wire.begin(BME280_SDI_PIN, BME280_SCK_PIN);
+
+  // Start BME280
+  while (!bme280.begin()) {
+    Serial.println("Wait for BME280 sensor!");
+    delay(500);
+  }
+
+  Serial.println("Found BME280");
+  if (bme280.chipModel() != BME280::ChipModel::ChipModel_BME280) {
+    Serial.println("ChipModel is not BME280");
+  }
+    
   server.begin();
 }
 
