@@ -2,6 +2,7 @@
 #include <M5Atom.h>
 #include "conf.hpp"
 #include "metrics.hpp"
+#include "bme280_metrics.hpp"
 
 /**
  * @brief 受け取った Stream に MAC アドレスを出力する
