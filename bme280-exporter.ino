@@ -12,6 +12,11 @@ void print_mac_address(Stream & stream);
  */
 void print_ip_address(Stream & stream);
 
+/**
+ * @brief クライアントにレスポンスを返す
+ */
+void recv_client(WiFiClient & client);
+
 WiFiServer server(80);
 
 void setup() {
@@ -34,27 +39,7 @@ void setup() {
 
 void loop() {
   auto client = server.available();
-  if (!client) {
-    return;
-  }
-  Serial.println("new client!");
-  while (client.connected()) {
-    if (!client.available()) {
-      continue;
-    }
-    const auto c = client.read();
-    if (c != '\n') {
-      continue;
-    }
-    client.println("HTTP/1.1 200 OK");
-    client.println("Content-Type: text/plain");
-    client.println();
-    print_mac_address(client);
-    print_ip_address(client);
-    break;
-  }
-  client.stop();
-  Serial.println("client closed");
+  recv_client(client);
 
   M5.update();
 }
@@ -78,4 +63,28 @@ void print_mac_address(Stream & stream) {
 void print_ip_address(Stream & stream) {
   const auto ip_address = WiFi.localIP();
   stream.println(ip_address);
+}
+
+void recv_client(WiFiClient & client) {
+  if (!client) {
+    return;
+  }
+  Serial.println("new client!");
+  while (client.connected()) {
+    if (!client.available()) {
+      continue;
+    }
+    const auto c = client.read();
+    if (c != '\n') {
+      continue;
+    }
+    client.println("HTTP/1.1 200 OK");
+    client.println("Content-Type: text/plain");
+    client.println();
+    print_mac_address(client);
+    print_ip_address(client);
+    break;
+  }
+  client.stop();
+  Serial.println("client closed");
 }
