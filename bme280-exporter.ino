@@ -2,28 +2,17 @@
 #include <M5Atom.h>
 #include "./conf.hpp"
 
+/**
+ * @brief 受け取った Stream に MAC アドレスを出力する
+ */
+void print_mac_address(Stream & stream);
+
+/**
+ * @brief 受け取った Stream に IPv4 アドレスを出力する
+ */
+void print_ip_address(Stream & stream);
+
 WiFiServer server(80);
-
-void print_mac_address(Stream & stream) {
-  byte mac[6] {};
-  WiFi.macAddress(mac);
-  stream.print(mac[5], HEX);
-  stream.print(":");
-  stream.print(mac[4], HEX);
-  stream.print(":");
-  stream.print(mac[3], HEX);
-  stream.print(":");
-  stream.print(mac[2], HEX);
-  stream.print(":");
-  stream.print(mac[1], HEX);
-  stream.print(":");
-  stream.println(mac[0], HEX);
-}
-
-void print_ip_address(Stream & stream) {
-  const auto ip_address = WiFi.localIP();
-  stream.println(ip_address);
-}
 
 void setup() {
   // Enable lcd and serial. Disable sdcard.
@@ -68,4 +57,25 @@ void loop() {
   Serial.println("client closed");
 
   M5.update();
+}
+
+void print_mac_address(Stream & stream) {
+  byte mac[6] {};
+  WiFi.macAddress(mac);
+  stream.print(mac[5], HEX);
+  stream.print(":");
+  stream.print(mac[4], HEX);
+  stream.print(":");
+  stream.print(mac[3], HEX);
+  stream.print(":");
+  stream.print(mac[2], HEX);
+  stream.print(":");
+  stream.print(mac[1], HEX);
+  stream.print(":");
+  stream.println(mac[0], HEX);
+}
+
+void print_ip_address(Stream & stream) {
+  const auto ip_address = WiFi.localIP();
+  stream.println(ip_address);
 }
