@@ -1,4 +1,4 @@
 constexpr const char * const WIFI_SSID = "";
 constexpr const char * const WIFI_PASSPHRASE = "";
-constexpr uint8_t BME280_SCK_PIN = 19;
-constexpr uint8_t BME280_SDI_PIN = 22;
+constexpr int8_t BME280_SCK_PIN = 19;
+constexpr int8_t BME280_SDI_PIN = 22;
